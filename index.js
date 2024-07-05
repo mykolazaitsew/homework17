@@ -10,23 +10,41 @@ function randomDelayPrint(message) {
 
 //randomDelayPrint('my name is kolya');
 
+
+function debounce(func, timeout = 1000) {
+  let timer;
+  return () => {
+    clearTimeout(timer);
+    timer = setTimeout(() => {
+      func();
+    }, timeout);
+  };
+}
+const operation = () => console.log("make operatin...");
+const debouncedOperation = debounce(operation, 2000);
+
+debouncedOperation();
+debouncedOperation();
+debouncedOperation();
+
+
 function intervalRace(functions, t) {
   return new Promise((resolve) => {
-      let results = [];
-      let index = 0;
+    let results = [];
+    let index = 0;
 
-      function callNextFunction() {
-          if (index < functions.length) {
-              let result = functions[index]();
-              results.push(result);
-              index++;
-              setTimeout(callNextFunction, t);
-          } else {
-              resolve(results);
-          }
+    function callNextFunction() {
+      if (index < functions.length) {
+        let result = functions[index]();
+        results.push(result);
+        index++;
+        setTimeout(callNextFunction, t);
+      } else {
+        resolve(results);
       }
+    }
 
-      callNextFunction();
+    callNextFunction();
   });
 }
 
@@ -36,8 +54,9 @@ const functions = [
   () => "1,5,3,4,2",
 ];
 
-intervalRace(functions, 1000).then((results) => {console.log(results);});
-
+intervalRace(functions, 1000).then((results) => {
+  console.log(results);
+});
 
 /*randomDelayPrint. Створіть функцію randomDelayPrint, яка прийматиме рядок message як аргумент і виводитиме кожну букву цього рядка з довільною затримкою від 0 до 1 секунди. Використовуйте setTimeout, щоб додати випадкову затримку перед виведенням кожної літери.
 debounce. Створіть функцію debounce, яка приймає функцію зворотного виклику і затримку (в мілісекундах) як аргументи. Функція debounce повинна повертати нову функцію, яка викликає вихідну функцію тільки після того, як минула вказана кількість часу без викликів. Це дасть змогу ігнорувати часті виклики функції та виконувати її лише один раз через зазначену затримку після останнього виклику.
